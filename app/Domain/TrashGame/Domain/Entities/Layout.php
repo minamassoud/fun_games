@@ -2,21 +2,12 @@
 
 namespace App\Domain\TrashGame\Domain\Entities;
 
-use App\Domain\TrashGame\Domain\Contracts\SlotFactoryInterface;
 use App\Domain\TrashGame\Domain\Exceptions\InvalidAction;
 use App\Domain\TrashGame\Domain\ValueObjects\Card;
 
 class Layout
 {
-    /** @var array<Slot> */
-    protected array $slots;
-
-    public function __construct(array $cards, protected SlotFactoryInterface $slotFactory)
-    {
-        foreach ($cards as $card) {
-            $this->slots[] = $this->slotFactory->make($card);
-        }
-    }
+    public function __construct(protected array $slots) {}
 
     public function getSlot(int $position): ?Slot
     {

@@ -14,10 +14,11 @@ use App\Domain\TrashGame\Domain\Exceptions\InvalidAction;
 use App\Domain\TrashGame\Domain\ValueObjects\Card;
 use App\Domain\TrashGame\Domain\ValueObjects\Rank;
 use App\Domain\TrashGame\Domain\ValueObjects\Suit;
+use App\Domain\TrashGame\Infrastructure\LayoutFactory;
 use App\Domain\TrashGame\Infrastructure\SlotFactory;
 
 beforeEach(function () {
-    $this->slotFactory = new SlotFactory;
+    $this->layoutFactory = new LayoutFactory(new SlotFactory);
 });
 
 describe('Layout', function () {
@@ -29,7 +30,7 @@ describe('Layout', function () {
             Card::make(Rank::Three, Suit::Club),
         ];
 
-        $layout = new Layout($cards, $this->slotFactory);
+        $layout = $this->layoutFactory->make($cards);
 
         expect($layout->count())->toBe(3);
     });
@@ -39,7 +40,7 @@ describe('Layout', function () {
             Card::make(Rank::Ace, Suit::Club),
         ];
 
-        $layout = new Layout($cards, $this->slotFactory);
+        $layout = $this->layoutFactory->make($cards);
 
         expect($layout->getSlot(1))->toBeInstanceOf(Slot::class);
     });
@@ -49,7 +50,7 @@ describe('Layout', function () {
             Card::make(Rank::Ace, Suit::Club),
         ];
 
-        $layout = new Layout($cards, $this->slotFactory);
+        $layout = $this->layoutFactory->make($cards);
 
         expect($layout->getSlot(2))->toBeNull();
     });
@@ -60,7 +61,7 @@ describe('Layout', function () {
             Card::make(Rank::Two, Suit::Club),
         ];
 
-        $layout = new Layout($cards, $this->slotFactory);
+        $layout = $this->layoutFactory->make($cards);
 
         $layout->placeCardAt(2, Card::make(Rank::Three, Suit::Club));
 
@@ -72,7 +73,7 @@ describe('Layout', function () {
             Card::make(Rank::King, Suit::Club),
         ];
 
-        $layout = new Layout($cards, $this->slotFactory);
+        $layout = $this->layoutFactory->make($cards);
 
         $card = $layout->placeCardAt(2, Card::make(Rank::Two, Suit::Club));
         $card2 = $layout->placeCardAt(1, Card::make(Rank::Jack, Suit::Club));
@@ -89,7 +90,7 @@ describe('Layout', function () {
             Card::make(Rank::King, Suit::Club),
         ];
 
-        $layout = new Layout($cards, $this->slotFactory);
+        $layout = $this->layoutFactory->make($cards);
         $layout->getSlot(2)->reveal();
 
         $toDiscardCard = $layout->placeCardAt(2, Card::make(Rank::Two, Suit::Club));
@@ -107,7 +108,7 @@ describe('Layout', function () {
             new Card(Rank::Two, Suit::Spade),
         ];
 
-        $layout = new Layout($cards, $this->slotFactory);
+        $layout = $this->layoutFactory->make($cards);
 
         $layout->getSlot(1)->reveal();
         expect($layout->roundWon())->toBeFalse('Should not win with 1/2 slots revealed');
