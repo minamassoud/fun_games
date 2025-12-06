@@ -6,6 +6,7 @@ use App\Domain\TrashGame\Domain\ValueObjects\Card;
 
 interface DeckInterface
 {
+    public function initForNewRound(): void;
     public function getCards(): array;
 
     public function deal(int $count = 1): array;

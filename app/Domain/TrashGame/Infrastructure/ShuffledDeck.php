@@ -9,10 +9,17 @@ use App\Domain\TrashGame\Domain\ValueObjects\Suit;
 
 class ShuffledDeck implements DeckInterface
 {
-    protected array $cards = [];
+    protected array $cards;
 
     public function __construct()
     {
+        $this->initForNewRound();
+    }
+
+    public function initForNewRound(): void
+    {
+        $this->cards = [];
+
         foreach (Rank::cases() as $rank) {
             foreach (Suit::cases() as $suite) {
                 $this->cards[] = Card::make($rank, $suite);

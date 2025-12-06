@@ -7,6 +7,9 @@ use App\Domain\TrashGame\Domain\ValueObjects\Card;
 
 class Layout
 {
+    /**
+     * @param  array<Slot>  $slots
+     */
     public function __construct(protected array $slots) {}
 
     public function getSlot(int $position): ?Slot
@@ -18,6 +21,24 @@ class Layout
         }
 
         return null;
+    }
+
+    public function slots(): array
+    {
+        return $this->slots;
+    }
+
+    public function facingDownSlotPositions(): array
+    {
+        $arr = [];
+
+        foreach ($this->slots as $i => $slot) {
+            if(!$slot->getCard()) {
+                $arr[] = $i+1;
+            }
+        }
+
+        return $arr;
     }
 
     public function placeCardAt(int $position, Card $newCard): Card

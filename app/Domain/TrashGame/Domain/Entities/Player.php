@@ -36,10 +36,9 @@ class Player
         return $this->level;
     }
 
-    public function setLevel(int $level): self
+    public function decLevel(): self
     {
-        $this->level = $level;
-
+        $this->level--;
         return $this;
     }
 

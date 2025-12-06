@@ -23,4 +23,13 @@ final readonly class Card
     {
         return in_array($this->rank, [Rank::King, Rank::Queen]);
     }
+
+    public function __toString(): string
+    {
+        if(in_array($this->rank, [Rank::Jack, Rank::King, Rank::Queen])) {
+            return $this->rank->name . "^({$this->suit->name})";
+        }
+
+        return $this->rank->value . "^({$this->suit->name})";
+    }
 }
